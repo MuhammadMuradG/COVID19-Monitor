@@ -142,7 +142,7 @@ def plot():
         "Fitting the data, R = {}".format(R),
         [(intercept + slope * x) for x in range(len(log_n_t))],
     )
-    line_chart.add("log(Cumulative Cases)", log_n_t)
+    line_chart.add("log(Cases)", log_n_t)
     fig_R = line_chart.render_data_uri()
 
     # Plot the Repres of requested country
