@@ -82,7 +82,7 @@ def plot():
     # Convert to data frame
     DFRAME = pd.DataFrame.from_dict(json.loads(RESPONSE.text))
 
-    # Retrieves the what Repres data is represent
+    # Retrieves the what Repres will be represent
     x = DFRAME["date"].to_list()
     if Repres == "cases":
         y = DFRAME[Repres].to_list()
@@ -118,16 +118,19 @@ def plot():
     # Retrive the Hospital beds in each country
     # Source: https://ourworldindata.org/grapher/hospital-beds-per-1000-people?tab=chart&year=2013
     if Repres == "cases_cum":
-        beds_data = pd.read_csv("./static/data/hospital-beds-per-1000-people.csv")
-        beds_data.filter(items=["Entity", "Year", "Hospital beds (per 100,000)"])
-        beds_data = beds_data[beds_data["Year"] == 2014]
-        beds_data = beds_data[beds_data["Entity"] == country]
+        try:
+            beds_data = pd.read_csv("./static/data/hospital-beds-per-1000-people.csv")
+            beds_data.filter(items=["Entity", "Year", "Hospital beds (per 100,000)"])
+            beds_data = beds_data[beds_data["Year"] == 2014]
+            beds_data = beds_data[beds_data["Entity"] == country]
 
-        # Compute the number of beds
-        numbers_beds = [
-            beds_data["Hospital beds (per 100,000)"].to_list()[0] * (p / 100000)
-            for p in population
-        ]
+            # Compute the number of beds
+            numbers_beds = [
+                beds_data["Hospital beds (per 100,000)"].to_list()[0] * (p / 100000)
+                for p in population
+            ]
+        except:
+            Message = "Sorry, but the health care capacity for this country still not supported. It will not appear in the representation"
 
     # Plot the fitting of R values
     line_chart = pygal.Line(
@@ -156,11 +159,11 @@ def plot():
     )
     bar_chart.x_labels = x
     bar_chart.add(Repres, y)
-    if Repres == "cases_cum":
+    if Repres == "cases_cum" and numbers_beds is list:
         bar_chart.add("Health Care Capacity", numbers_beds)
     fig = bar_chart.render_data_uri()
 
-    return render_template("plots.html", country=country, fig=fig, fig_R=fig_R)
+    return render_template("plots.html", country=country, fig=fig, fig_R=fig_R, Message=Message)
 
 
 @app.route("/World_Map", methods=["GET"])
