@@ -1,7 +1,6 @@
 # COVID19-Monitor
 
----
-Author: Muhammad Mourad & Sayed Omar
+Author: Muhammad Mourad & Sayed Omar  
 License: MIT License
 
 ---
