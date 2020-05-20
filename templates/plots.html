@@ -66,11 +66,11 @@ http://www.tooplate.com/view/2100-artist
 			<div class="row">
 				<div class="wow fadeInUp section-title" data-wow-delay="1s">
 					<h3>{{ country }}</h3>
-					{% if Message %}
-						<p><span style="color: #ff0054">{{ Message }}</span></h>
+					{% if Message == None %}
 						<embed type="image/svg+xml" src= {{ fig|safe }} class="wow fadeInUp img-responsive"
 						data-wow-delay="1s" alt="about image" />
 					{% else %}
+						<p><span style="color: #ff0000">*{{ Message }}</span></h>
 						<embed type="image/svg+xml" src= {{ fig|safe }} class="wow fadeInUp img-responsive"
 						data-wow-delay="1s" alt="about image" />
 					{% endif %}

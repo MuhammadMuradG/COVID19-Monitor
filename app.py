@@ -117,6 +117,7 @@ def plot():
 
     # Retrive the Hospital beds in each country
     # Source: https://ourworldindata.org/grapher/hospital-beds-per-1000-people?tab=chart&year=2013
+    Message = None
     if Repres == "cases_cum":
         try:
             beds_data = pd.read_csv("./static/data/hospital-beds-per-1000-people.csv")
@@ -159,11 +160,13 @@ def plot():
     )
     bar_chart.x_labels = x
     bar_chart.add(Repres, y)
-    if Repres == "cases_cum" and numbers_beds is list:
+    if Repres == "cases_cum" and Message == None:
         bar_chart.add("Health Care Capacity", numbers_beds)
     fig = bar_chart.render_data_uri()
 
-    return render_template("plots.html", country=country, fig=fig, fig_R=fig_R, Message=Message)
+    return render_template(
+        "plots.html", country=country, fig=fig, fig_R=fig_R, Message=Message
+    )
 
 
 @app.route("/World_Map", methods=["GET"])
