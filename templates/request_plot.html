@@ -71,7 +71,7 @@ http://www.tooplate.com/view/2100-artist
 						data-wow-delay="0.2s" alt="about image">
 					<div class="wow fadeInUp" data-wow-delay="0.4s">
 						<h4>Search for Country</h4>
-						<form action='http://localhost:5000/Plot' method='POST'>
+						<form action='/Plot' method='POST'>
 							<select name=country method='GET'>
 								{% for country in countries %}
 								<option value="{{ country }}" SELECTED>{{ country }}
