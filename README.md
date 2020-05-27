@@ -25,4 +25,4 @@ Japan Country
 ![alt text](./screenshots/RepreCountry2.png "Japan data")
 
 Top Deaths
-![alt text](./screenshots/Screenshotng "Top deaths data")
+![alt text](./screenshots/TopDeaths.png "Top deaths data")
