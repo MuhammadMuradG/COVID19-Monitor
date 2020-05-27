@@ -25,4 +25,4 @@ Japan Country
 ![alt text](./screenshots/RepreCountry2.png "Japan data")
 
 Top Deaths
-![alt text](./screenshots/Screenshot at 2020-05-28 00-06-44.png "Top deaths data")
+![alt text](./screenshots/Screenshotng "Top deaths data")
