@@ -5,7 +5,7 @@
 
 	<meta charset="UTF-8">
 
-	<title>Artist - Minimal HTML Portfolio</title>
+	<title>COVID19-Monitor | Requseting</title>
 
 	<!--
 
@@ -72,19 +72,19 @@ http://www.tooplate.com/view/2100-artist
 					<div class="wow fadeInUp" data-wow-delay="0.4s">
 						<h4>Search for Country</h4>
 						<form action='/Plot' method='POST'>
-							<select name=country method='GET'>
+							<select style="width: 100%;" name=country method='GET'>
 								{% for country in countries %}
 								<option value="{{ country }}" SELECTED>{{ country }}
 								</option>"
 								{% endfor %}
 							</select>
-							<select name=Repres method='GET'>
+							<select style="width: 100%;" style="width: 100%;"name=Repres method='GET'>
 								{% for Repres in Representation %}
 								<option value="{{ Repres }}" SELECTED>{{ Repres }}
 								</option>"
 								{% endfor %}
 							</select>
-							<button type="submit">Find</button>
+							<button style="width: 100%;" type="submit">Find</button>
 						</form>
 						<p>This tool enables you to choose the country and represent the number
 							of cases and deaths.</p>
