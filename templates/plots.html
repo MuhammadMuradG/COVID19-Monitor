@@ -5,7 +5,7 @@
 
 	<meta charset="UTF-8">
 
-	<title>Artist - Minimal HTML Portfolio</title>
+	<title>COVID19-Monitor | Plotting</title>
 
 	<!--
 
@@ -72,23 +72,21 @@ http://www.tooplate.com/view/2100-artist
 					{% if message2 != None %}
 					<p style="color: #ff0000">*{{ message2 }}</p>
 					{% endif %}
-					<embed type="image/svg+xml" src={{ fig|safe }} class="wow fadeInUp img-responsive"
-						data-wow-delay="1s" alt="about image" />
+					<embed type="image/svg+xml" src={{ fig|safe }} alt="about image" />
 
 					<h3>The Virus Basic Reproduction Number; R</h3>
-					<embed type="image/svg+xml" src={{ fig_R|safe }} class="wow fadeInUp img-responsive"
-						data-wow-delay="1s" alt="about image" />
+					<embed type="image/svg+xml" src={{ fig_R|safe }} alt="about image" />
 					<div class="parallax-section">
-						<h2>Keep Safe</h2>
-						<p>There are only three reasons why you should be motivated to keep
-							safe:
-							For yourself;
-							For your family; and
-							For your work mates.
-						</p>
-						<button type="submit">
+						<div class="col-md-4" style="width: 100%">
+							<h2>Keep Safe</h2>
+							<p>There are only three reasons why you should be motivated to keep
+								safe:
+								For yourself;
+								For your family; and
+								For your work mates.
+							</p>
 							<a href="/Request">Choose another country</a>
-						</button>
+						</div>
 					</div>
 				</div>
 			</div>
