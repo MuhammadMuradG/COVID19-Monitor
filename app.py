@@ -66,8 +66,12 @@ def request_plot():
     DFRAME = pd.DataFrame.from_dict(json.loads(RESPONSE.text))
 
     # Return a list of countries and Representation
-    countries = DFRAME.filter(items=["country", "cases"]).groupby(
-        "country", as_index=False).sum()["country"].to_list()
+    countries = (
+        DFRAME.filter(items=["country", "cases"])
+        .groupby("country", as_index=False)
+        .sum()["country"]
+        .to_list()
+    )
     Representation = ["cases", "cases_cum", "deaths", "deaths_cum"]
 
     return render_template(
@@ -118,10 +122,21 @@ def plot():
         else:
             log_n_t.append(math.log10(i))
 
+    # Compute the fitting and R
     slope, intercept, r_value, p_value, std_err = stats.linregress(
-        range(len(n_t)), log_n_t
+        range(len(log_n_t)), log_n_t
     )
     R = 10 ** (slope * 6)
+
+    # Compute the fitting and daily R
+    (
+        daily_slope,
+        daily_intercept,
+        daily_r_value,
+        daily_p_value,
+        daily_std_err,
+    ) = stats.linregress(range(len(log_n_t[-14:])), log_n_t[-14:])
+    dialy_R = 10 ** (slope * 6)
 
     # Find the population of the country
     population = DFRAME["population"].to_list()
@@ -130,21 +145,34 @@ def plot():
     # Source: https://ourworldindata.org/grapher/hospital-beds-per-1000-people?tab=chart&year=2013
     if Repres == "cases_cum":
         try:
-            beds_data = pd.read_csv(
-                "./static/data/hospital-beds-per-1000-people.csv")
-            beds_data.filter(
-                items=["Entity", "Year", "Hospital beds (per 100,000)"])
+            beds_data = pd.read_csv("./static/data/hospital-beds-per-1000-people.csv")
+            beds_data.filter(items=["Entity", "Year", "Hospital beds (per 100,000)"])
             beds_data = beds_data[beds_data["Year"] == 2014]
             beds_data = beds_data[beds_data["Entity"] == country]
 
             # Compute the number of beds
             numbers_beds = [
-                beds_data["Hospital beds (per 100,000)"].to_list()[
-                    0] * (p / 100000)
+                beds_data["Hospital beds (per 100,000)"].to_list()[0] * (p / 100000)
                 for p in population
             ]
         except:
             message2 = "Sorry, but the health care capacity for this country still not supported. It will not appear in the representation"
+
+    # Plot the fitting of daily_R values
+    line_chart = pygal.Line(
+        legend_at_bottom=True,
+        stroke=True,
+        pretty_print=True,
+        human_readable=True,
+        height=200,
+        style=DarkStyle,
+    )
+    line_chart.add(
+        "Fitting the data, R = {}".format(R),
+        [(daily_intercept + daily_slope * x) for x in range(len(log_n_t[-14:]))],
+    )
+    line_chart.add("log(Cases)", log_n_t[-14:])
+    fig_dialy_R = line_chart.render_data_uri()
 
     # Plot the fitting of R values
     line_chart = pygal.Line(
@@ -178,7 +206,13 @@ def plot():
     fig = bar_chart.render_data_uri()
 
     return render_template(
-        "plots.html", country=country, fig=fig, fig_R=fig_R, message1=message1, message2=message2
+        "plots.html",
+        country=country,
+        fig=fig,
+        fig_R=fig_R,
+        fig_dialy_R=fig_dialy_R,
+        message1=message1,
+        message2=message2,
     )
 
 
@@ -193,13 +227,19 @@ def world_map():
     DFRAME = pd.DataFrame.from_dict(json.loads(RESPONSE.text))
 
     # Return a list of codes of countries and Representation and cases and deaths
-    codes = [code.lower() for code in (DFRAME.filter(items=["code", "cases"]).groupby(
-        "code", as_index=False).sum()["code"].to_list())]
+    codes = [
+        code.lower()
+        for code in (
+            DFRAME.filter(items=["code", "cases"])
+            .groupby("code", as_index=False)
+            .sum()["code"]
+            .to_list()
+        )
+    ]
     Representation = ["cases", "cases_cum", "deaths", "deaths_cum"]
 
     cases = (
-        DFRAME.filter(items=["code", "cases"]).groupby(
-            "code").sum().to_dict()["cases"]
+        DFRAME.filter(items=["code", "cases"]).groupby("code").sum().to_dict()["cases"]
     )
     deaths = (
         DFRAME.filter(items=["code", "deaths"])
@@ -221,8 +261,7 @@ def world_map():
     dict_cases_deaths = {}
     for code in codes:
         dict_cases_deaths[code] = {
-            "Cases: {}, Deaths: {}".format(
-                cases[code.upper()], deaths[code.upper()])
+            "Cases: {}, Deaths: {}".format(cases[code.upper()], deaths[code.upper()])
         }
 
     # Plot the data
