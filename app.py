@@ -136,7 +136,7 @@ def plot():
         daily_p_value,
         daily_std_err,
     ) = stats.linregress(range(len(log_n_t[-14:])), log_n_t[-14:])
-    dialy_R = 10 ** (slope * 6)
+    daily_R = 10 ** (daily_slope * 6)
 
     # Find the population of the country
     population = DFRAME["population"].to_list()
@@ -168,7 +168,7 @@ def plot():
         style=DarkStyle,
     )
     line_chart.add(
-        "Fitting the data, R = {}".format(R),
+        "Fitting the data, daily_R = {}".format(daily_R),
         [(daily_intercept + daily_slope * x) for x in range(len(log_n_t[-14:]))],
     )
     line_chart.add("log(Cases)", log_n_t[-14:])
